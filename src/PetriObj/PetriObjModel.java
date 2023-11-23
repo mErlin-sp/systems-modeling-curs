@@ -143,7 +143,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
         for (PetriSim e : getListObj()) { //edited 9.11.2015, 18.07.2018
             e.input();
         }
-        if (isProtocolPrint() == true) {
+        if (isProtocolPrint()) {
             for (PetriSim e : getListObj()) {
                 e.printMark();
             }
@@ -167,7 +167,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
              return;
             
              }*/
-            if (isStatistics() == true) {
+            if (isStatistics()) {
                 for (PetriSim e : getListObj()) {
                    if (min > 0) {
                         if(min<this.getSimulationTime())
@@ -181,7 +181,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
 
            this.setCurrentTime(min); // просування часу //3.12.2015
             
-            if (isProtocolPrint() == true) {
+            if (isProtocolPrint()) {
                 System.out.println(" Time progress: time = " + this.getCurrentTime() + "\n");
             }
             if (this.getCurrentTime() <= this.getSimulationTime()) {
@@ -194,7 +194,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
                 }
                 int num;
                 int max;
-                if (isProtocolPrint() == true) {
+                if (isProtocolPrint()) {
                     System.out.println(" List of conflicting objects  " + "\n");
                     for (int ii = 0; ii < conflictObj.size(); ii++) {
                         System.out.println(" K [ " + ii + "  ] = " + conflictObj.get(ii).getName() + "\n");
@@ -221,7 +221,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
                     num = 0;
                 }
 
-                if (isProtocolPrint() == true) {
+                if (isProtocolPrint()) {
                     System.out.println(" Selected object  " + conflictObj.get(num).getName() + "\n" + " NextEvent " + "\n");
                 }
 
@@ -235,7 +235,7 @@ public class PetriObjModel implements Serializable, Cloneable  {
                         sim.output(); // added by Inna 11.07.2018
                     }
                 }
-                if (isProtocolPrint() == true) {
+                if (isProtocolPrint()) {
                     System.out.println("Markers output:");
                     for (PetriSim sim : getListObj()) //ДРУК поточного маркірування
                     {

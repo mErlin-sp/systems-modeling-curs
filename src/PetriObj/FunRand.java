@@ -10,12 +10,12 @@ import java.util.logging.Logger;
  */
 
 
-
 /**
- *This class contains methods for generating a random value according to a given distribution
- *  @author Inna V. Stetsenko
+ * This class contains methods for generating a random value according to a given distribution
+ *
+ * @author Inna V. Stetsenko
  */
-public  class FunRand {
+public class FunRand {
 
 
     /**
@@ -48,7 +48,7 @@ public  class FunRand {
             a = Math.random();
         }
         a = timeMin + a * (timeMax - timeMin);
-        if (a<0)
+        if (a < 0)
             throw new ExceptionInvalidTimeDelay("Negative time delay is generatated: Check parameters for time delay.");
         return a;
     }
@@ -56,7 +56,7 @@ public  class FunRand {
     /**
      * Generates random value according to a normal (Gauss) distribution
      *
-     * @param timeMean the mean of random value
+     * @param timeMean      the mean of random value
      * @param timeDeviation the deviation of random value
      * @return a random value according to a normal (Gauss) distribution
      * @throws PetriObj.ExceptionInvalidTimeDelay the negative value of the delay time is excluded
@@ -65,14 +65,16 @@ public  class FunRand {
         double a;
         Random r = new Random();
         a = timeMean + timeDeviation * r.nextGaussian();
-        if (a<0)
+        if (a < 0)
             throw new ExceptionInvalidTimeDelay("Negative time delay is generatated: Check parameters for time delay.");
         return a;
     }
+
     /**
      * Generates random value according to the empiric distribution
-     * determined by the sequence of points (xi,yi), 
+     * determined by the sequence of points (xi,yi),
      * where yi are from interval (0;1)
+     *
      * @param x the array of x coordinates of points
      * @param y the array of y coordinates of points
      * @return a random value according to a empiric distribution
@@ -80,22 +82,22 @@ public  class FunRand {
      */
     public static double empiric(double[] x, double[] y) throws Exception {
         int n = x.length;
-        if(y[n-1]!=1.0)
-             throw new Exception("Illegal array of points for empiric distribution");
+        if (y[n - 1] != 1.0)
+            throw new Exception("Illegal array of points for empiric distribution");
         double a;
         double r = Math.random();
-       
-        for(int i=1;i<n-1;i++){
-           if(r>y[i-1]&&r<=y[i]){
-               a=x[i-1]+(r-y[i-1])*(x[i]-x[i-1])/(y[i]-y[i-1]);
-               return a;
-           }
+
+        for (int i = 1; i < n - 1; i++) {
+            if (r > y[i - 1] && r <= y[i]) {
+                a = x[i - 1] + (r - y[i - 1]) * (x[i] - x[i - 1]) / (y[i] - y[i - 1]);
+                return a;
+            }
         }
-        a=x[n-2]+(r-y[n-2])*(x[n-1]-x[n-2])/(y[n-1]-y[n-2]);
-        
-        if (a<0)
+        a = x[n - 2] + (r - y[n - 2]) * (x[n - 1] - x[n - 2]) / (y[n - 1] - y[n - 2]);
+
+        if (a < 0)
             throw new ExceptionInvalidTimeDelay("Negative time delay is generatated: Check parameters for time delay.");
         return a;
     }
-   
+
 }

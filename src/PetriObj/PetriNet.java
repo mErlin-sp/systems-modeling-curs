@@ -2,6 +2,7 @@ package PetriObj;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,6 +10,7 @@ import java.util.logging.Logger;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
  * This class provides constructing Petri net
  *
@@ -44,10 +46,10 @@ public class PetriNet implements Cloneable, Serializable {
      * Construct Petri net for given set of places, set of transitions, set of
      * arcs and the name of Petri net
      *
-     * @param s name of Petri net
-     * @param pp set of places
-     * @param TT set of transitions
-     * @param In set of arcs directed from place to transition
+     * @param s   name of Petri net
+     * @param pp  set of places
+     * @param TT  set of transitions
+     * @param In  set of arcs directed from place to transition
      * @param Out set of arcs directed from transition to place
      */
     public PetriNet(String s, PetriP[] pp, PetriT TT[], ArcIn[] In, ArcOut[] Out) {
@@ -79,11 +81,10 @@ public class PetriNet implements Cloneable, Serializable {
     }
 
     /**
-     *
-     * @param s name of Petri net
-     * @param pp set of places
-     * @param TT set of transitions
-     * @param In set of arcs directed from place to transition
+     * @param s   name of Petri net
+     * @param pp  set of places
+     * @param TT  set of transitions
+     * @param In  set of arcs directed from place to transition
      * @param Out set of arcs directed from transition to place
      * @throws PetriObj.ExceptionInvalidTimeDelay if Petri net has invalid structure
      */
@@ -115,14 +116,13 @@ public class PetriNet implements Cloneable, Serializable {
         }
 
         for (PetriT transition : ListT) {
-            transition.createInP( ListIn);
-            transition.createOutP( ListOut);
+            transition.createInP(ListIn);
+            transition.createOutP(ListOut);
         }
 
     }
 
     /**
-     *
      * @return name of Petri net
      */
     public String getName() {
@@ -139,7 +139,6 @@ public class PetriNet implements Cloneable, Serializable {
     }
 
     /**
-     *
      * @return array of Petri net places
      */
     public PetriP[] getListP() {
@@ -147,7 +146,6 @@ public class PetriNet implements Cloneable, Serializable {
     }
 
     /**
-     *
      * @return array of Petri net transitions
      */
     public PetriT[] getListT() {
@@ -155,7 +153,6 @@ public class PetriNet implements Cloneable, Serializable {
     }
 
     /**
-     *
      * @return array of Petri net input arcs
      */
     public ArcIn[] getArcIn() {
@@ -163,7 +160,6 @@ public class PetriNet implements Cloneable, Serializable {
     }
 
     /**
-     *
      * @return array of Petri net output arcs
      */
     public ArcOut[] getArcOut() {
@@ -177,12 +173,12 @@ public class PetriNet implements Cloneable, Serializable {
      * @return number of place with given name
      */
     public int strToNumP(String s) {
-        
+
         int a = -1;
         for (PetriP e : ListP) {
             if (s.equalsIgnoreCase(e.getName())) {
                 a = e.getNumber();
-                
+
             }
         }
         return a;
@@ -194,9 +190,8 @@ public class PetriNet implements Cloneable, Serializable {
      * @param s name of place
      * @return quantity of markers in place with given name
      */
-    public int getCurrentMark(String s) {
-        int a = ListP[PetriNet.this.strToNumP(s)].getMark();
-        return a;
+    public List<PetriM> getCurrentMark(String s) {
+        return ListP[PetriNet.this.strToNumP(s)].getMarks();
     }
 
     /**
@@ -235,17 +230,17 @@ public class PetriNet implements Cloneable, Serializable {
     /**
      * Finds the place of Petri net with given name and given set of places
      *
-     * @param s name of place
+     * @param s  name of place
      * @param pp array of places
      * @return the number of place
      */
     public int strToNumP(String s, PetriP[] pp) {
-   
+
         int a = -1;
         for (PetriP e : pp) {
             if (s.equalsIgnoreCase(e.getName())) {
                 a = e.getNumber();
-                
+
             }
         }
         return a;
@@ -258,12 +253,12 @@ public class PetriNet implements Cloneable, Serializable {
      * @return the number of transition of Petri net with given name
      */
     public int strToNumT(String s) {
-        
+
         int a = -1;
         for (PetriT e : ListT) {
             if (s.equalsIgnoreCase(e.getName())) {
                 a = e.getNumber();
-                
+
             }
         }
         return a;
@@ -289,19 +284,20 @@ public class PetriNet implements Cloneable, Serializable {
      */
     public void printMark() {
         System.out.print("Mark in Net  " + this.getName() + "   ");
-        for (PetriP position: ListP) {
-            System.out.print(position.getMark() + "  ");
+        for (PetriP position : ListP) {
+            System.out.print(position.getMarks() + "  ");
         }
         System.out.println();
     }
+
     public void printBuffer() {
         System.out.print("Buffer in Net  " + this.getName() + "   ");
-        for (PetriT transition: ListT) {
+        for (PetriT transition : ListT) {
             System.out.print(transition.getBuffer() + "  ");
         }
         System.out.println();
     }
-    
+
     @Override
     public PetriNet clone() throws CloneNotSupportedException //14.11.2012
     {
@@ -332,7 +328,7 @@ public class PetriNet implements Cloneable, Serializable {
 
         return net;
     }
-    
+
     public boolean hasParameters() { // added by Katya 08.12.2016
         for (PetriP petriPlace : ListP) {
             if (petriPlace.markIsParam()) {
