@@ -8,14 +8,27 @@ import java.util.Objects;
 
 public class PetriObjSimulation {
 
+    private final static double avgShipArrival = 1.25;
+    private final static double avgMaintenanceTime = 1;
+    private final static int numOfCranes = 2;
+    private final static double timeModeling = 10000.0;
+
     public static void main(String[] args) throws ExceptionInvalidTimeDelay {
-        System.out.println("Моделювання Систем. Курсова Робота.");
+        System.out.println("Modeling of Systems. Coursework. Oleksandr Popov. IT-z01");
+        System.out.println();
+        System.out.println("Input values:");
+        System.out.println("Average Ship Arrival Interval: " + avgShipArrival);
+        System.out.println("Average Ship Maintenance Time: " + avgMaintenanceTime);
+        System.out.println("Num of Cranes: " + numOfCranes);
+        System.out.println("Modeling time: " + timeModeling);
+        System.out.println("------------------------------------------------");
+        System.out.println();
+
         PetriObjModel model = getModel();
         model.setIsProtokol(false);
-        double timeModeling = 10000.0;
         model.go(timeModeling);
 
-        System.out.println("Results:");
+        System.out.println("Output values:");
         for (PetriP p : model.getListObj().get(0).getNet().getListP()) {
             if (Objects.equals(p.getName(), "End")) {
                 List<PetriM> marks = p.getMarks();
@@ -35,11 +48,11 @@ public class PetriObjSimulation {
 
     public static PetriObjModel getModel() throws ExceptionInvalidTimeDelay {
         ArrayList<PetriSim> list = new ArrayList<>();
-        list.add(new PetriSim(getNet()));
+        list.add(new PetriSim(getNet(avgShipArrival, avgMaintenanceTime, numOfCranes)));
         return new PetriObjModel(list);
     }
 
-    public static PetriNet getNet() throws ExceptionInvalidTimeDelay {
+    public static PetriNet getNet(double avgShipArrival, double avgMaintenanceTime, int numOfCranes) throws ExceptionInvalidTimeDelay {
         ArrayList<PetriP> d_P = new ArrayList<>();
         ArrayList<PetriT> d_T = new ArrayList<>();
         ArrayList<ArcIn> d_In = new ArrayList<>();
@@ -55,7 +68,7 @@ public class PetriObjSimulation {
         d_P.getLast().setMarkParam("path");
         d_P.add(new PetriP("2-2", 0));
         d_P.getLast().setMarkParam("path");
-        d_P.add(new PetriP("Cranes", 2));
+        d_P.add(new PetriP("Cranes", numOfCranes));
         d_P.add(new PetriP("End", 0));
         d_P.getLast().setMarkParam("dispose");
         d_P.add(new PetriP("1-5", 1));
@@ -69,43 +82,43 @@ public class PetriObjSimulation {
         d_P.getLast().setMarkParam("path");
         d_P.add(new PetriP("2-4", 0));
         d_P.getLast().setMarkParam("path");
-        d_T.add(new PetriT("T1", 1.25));
+        d_T.add(new PetriT("T1", avgShipArrival));
         d_T.get(0).setDistribution("exp", d_T.get(0).getTimeServ());
         d_T.get(0).setParamDeviation(0.0);
         d_T.add(new PetriT("T2", 0.0));
         d_T.get(1).setPriority(1);
         d_T.add(new PetriT("T3", 0.0));
         d_T.get(2).setPriority(1);
-        d_T.add(new PetriT("T4", 1.0));
+        d_T.add(new PetriT("T4", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
-        d_T.add(new PetriT("T6", 1.0));
+        d_T.add(new PetriT("T6", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
         d_T.add(new PetriT("T12", 0.0));
         d_T.get(5).setPriority(1);
         d_T.add(new PetriT("T13", 0.0));
         d_T.get(6).setPriority(1);
-        d_T.add(new PetriT("T16", 1.0));
+        d_T.add(new PetriT("T16", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
-        d_T.add(new PetriT("T22", 1.0));
+        d_T.add(new PetriT("T22", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
         d_T.add(new PetriT("T1", 0.0));
-        d_T.add(new PetriT("T2", 1.0));
+        d_T.add(new PetriT("T2", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
-        d_T.add(new PetriT("T4", 1.0));
+        d_T.add(new PetriT("T4", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
         d_T.add(new PetriT("T5", 0.0));
         d_T.add(new PetriT("T6", 0.0));
         d_T.add(new PetriT("T7", 0.0));
-        d_T.add(new PetriT("T1", 1.0));
+        d_T.add(new PetriT("T1", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
-        d_T.add(new PetriT("T2", 1.0));
+        d_T.add(new PetriT("T2", avgMaintenanceTime));
         d_T.getLast().setDistribution("unif", d_T.getLast().getTimeServ());
         d_T.getLast().setParamDeviation(0.5);
         d_In.add(new ArcIn(d_P.get(4), d_T.get(5), 1));
