@@ -3,18 +3,35 @@ package mypackage;
 import PetriObj.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class PetriObjSimulation {
 
-    private final static double avgShipArrival = 1.25;
-    private final static double avgMaintenanceTime = 1;
-    private final static int numOfCranes = 2;
+    private final static double avgShipArrival = 1.5; // 0.5 - 1.5
+    private final static double avgMaintenanceTime = 0.5; // 0.5 - 1.5
+    private final static int numOfCranes = 2; // 2 - 4
     private final static double timeModeling = 10000.0;
 
     public static void main(String[] args) throws ExceptionInvalidTimeDelay {
         System.out.println("Modeling of Systems. Coursework. Oleksandr Popov. IT-z01");
+
+        double[] results = new double[20];
+        for (int i = 0; i < 20; i++) {
+            results[i] = runExperiment();
+        }
+
+        System.out.println("-----------------------------------------------------");
+
+        for (int i = 0; i < 20; i++) {
+            System.out.println("Run " + (i + 1) + ". Model response: " + results[i]);
+        }
+        System.out.println("Average model response: " + Arrays.stream(results).average().orElse(0.0));
+
+    }
+
+    public static double runExperiment() throws ExceptionInvalidTimeDelay {
         System.out.println();
         System.out.println("Input values:");
         System.out.println("Average Ship Arrival Interval: " + avgShipArrival);
@@ -29,12 +46,13 @@ public class PetriObjSimulation {
         model.go(timeModeling);
 
         System.out.println("Output values:");
+        double avg = 0;
         for (PetriP p : model.getListObj().get(0).getNet().getListP()) {
             if (Objects.equals(p.getName(), "End")) {
                 List<PetriM> marks = p.getMarks();
                 double min = marks.stream().mapToDouble(PetriM::getServiceTime).min().orElse(0.0);
                 double max = marks.stream().mapToDouble(PetriM::getServiceTime).max().orElse(0.0);
-                double avg = marks.stream().mapToDouble(PetriM::getServiceTime).average().orElse(0.0);
+                avg = marks.stream().mapToDouble(PetriM::getServiceTime).average().orElse(0.0);
                 System.out.printf("Ships maintained: %d. Min maintenance time: %f. Max maintenance time: %f. Mean maintenance time: %f.\n", p.getMarks().size(), min, max, avg);
             } else if (Objects.equals(p.getName(), "1-5")) {
                 System.out.printf("Anchorage 1. Mean load: %f\n", (1 - p.getMean()));
@@ -44,6 +62,7 @@ public class PetriObjSimulation {
                 System.out.printf("Cranes 1 & 2. Mean load: %f\n", (1 - (p.getMean() / 2)));
             }
         }
+        return avg;
     }
 
     public static PetriObjModel getModel() throws ExceptionInvalidTimeDelay {
